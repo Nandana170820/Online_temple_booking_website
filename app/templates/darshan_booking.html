@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% block title %}{{ t("Darshan Booking") }} | {{ t("Mangad Devi Temple") }}{% endblock %}
+{% block content %}
+<section class="form-page">
+  <div class="form-intro">
+    <p class="eyebrow">{{ t("Darshan booking") }}</p>
+    <h1>{{ t("Select date and time slot") }}</h1>
+    <p>{{ t("Book a managed darshan slot for Mangad Devi Temple. Confirmation is issued only after payment.") }}</p>
+    <div class="info-grid">
+      <div class="info-panel">
+        <strong>{{ t("Darshan amount") }}</strong>
+        <span>&#8377;{{ "%.0f"|format(service.price) }} {{ t("per person") }}</span>
+      </div>
+      <div class="info-panel">
+        <strong>{{ t("Carry during visit") }}</strong>
+        <span>{{ t("Booking ID, mobile number and digital receipt.") }}</span>
+      </div>
+    </div>
+  </div>
+
+  <form class="booking-form" method="post" data-booking-form data-unit-price="{{ service.price }}">
+    <input type="hidden" name="service_id" value="{{ service.id }}">
+    <div class="form-banner">
+      <strong>{{ t("Special Darshan") }}</strong>
+      <span>{{ t("Capacity is verified before the payment page opens.") }}</span>
+    </div>
+    <div class="two-col">
+      <label>{{ t("Visit date") }}
+        <input type="date" name="visit_date" required>
+      </label>
+      <label>{{ t("Time slot") }}
+        <select name="slot_id" required>
+          {% for slot in slots %}
+            <option value="{{ slot.id }}">{{ t(slot.name) }} - {{ format_time(slot.slot_time) }}</option>
+          {% endfor %}
+        </select>
+      </label>
+    </div>
+    <div class="two-col">
+      <label>{{ t("Devotee name") }}
+        <input type="text" name="devotee_name" value="{{ current_user.name }}" required>
+      </label>
+      <label>{{ t("Number of persons") }}
+        <input type="number" name="participants" min="1" value="1" required data-quantity-input>
+      </label>
+    </div>
+    <div class="two-col">
+      <label>{{ t("Mobile") }}
+        <input type="tel" name="devotee_phone" value="{{ current_user.phone }}" required>
+      </label>
+      <label>{{ t("Email") }}
+        <input type="email" name="devotee_email" value="{{ current_user.email }}" required>
+      </label>
+    </div>
+    <label>{{ t("Notes") }}
+      <textarea name="notes" rows="4" placeholder="{{ t('Optional temple office note') }}"></textarea>
+    </label>
+    <div class="estimate-panel">
+      <span>{{ t("Estimated total") }}</span>
+      <strong data-total-amount>&#8377;{{ "%.0f"|format(service.price) }}</strong>
+    </div>
+    <button class="button primary wide" type="submit">{{ t("Continue to Payment") }}</button>
+  </form>
+</section>
+{% endblock %}

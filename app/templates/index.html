@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+{% block title %}{{ t("Mangad Devi Temple") }} | {{ t("Online Services") }}{% endblock %}
+{% block content %}
+<section class="hero">
+  <img src="{{ url_for('static', filename='images/temple-hero.png') }}" alt="{{ t('Mangad Devi Temple') }}">
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <p class="eyebrow">{{ t("Temple online services") }}</p>
+    <h1>{{ t("Mangad Devi Temple") }}</h1>
+    <p>{{ t("Plan your visit, book offerings and keep your temple receipt ready before arrival.") }}</p>
+    <div class="hero-actions">
+      <a class="button primary" href="{{ url_for('darshan_booking') }}">{{ t("Book Darshan") }}</a>
+      <a class="button secondary" href="{{ url_for('vazhipadu_booking') }}">{{ t("Book Vazhipadu") }}</a>
+    </div>
+  </div>
+  <aside class="hero-panel" aria-label="{{ t('Today at the temple') }}">
+    <span class="panel-label">{{ t("Today") }}</span>
+    <strong>{{ t("Darshan opens from 03:30 AM") }}</strong>
+    <p>{{ t("Online booking is available for darshan and vazhipadu slots. Carry a printed or digital receipt during visit.") }}</p>
+  </aside>
+</section>
+
+<section class="service-strip" aria-label="{{ t('Online service shortcuts') }}">
+  <a href="{{ url_for('darshan_booking') }}">
+    <span>01</span>
+    <strong>{{ t("Darshan Booking") }}</strong>
+    <small>{{ t("Date and slot reservation") }}</small>
+  </a>
+  <a href="{{ url_for('vazhipadu_booking') }}">
+    <span>02</span>
+    <strong>{{ t("Vazhipadu Booking") }}</strong>
+    <small>{{ t("Offerings with devotee details") }}</small>
+  </a>
+  <a href="{{ url_for('services') }}">
+    <span>03</span>
+    <strong>{{ t("Services") }}</strong>
+    <small>{{ t("Available online bookings") }}</small>
+  </a>
+  <a href="{{ url_for('timings') }}">
+    <span>04</span>
+    <strong>{{ t("Timings") }}</strong>
+    <small>{{ t("Darshan and pooja schedule") }}</small>
+  </a>
+</section>
+
+<section class="public-assurance" aria-label="{{ t('Booking support highlights') }}">
+  <div>
+    <span>{{ t("Open website") }}</span>
+    <strong>{{ t("Anyone can view services") }}</strong>
+  </div>
+  <div>
+    <span>{{ t("Online booking") }}</span>
+    <strong>{{ t("Darshan and vazhipadu slots") }}</strong>
+  </div>
+  <div>
+    <span>{{ t("Receipts") }}</span>
+    <strong>{{ t("PDF receipt after payment") }}</strong>
+  </div>
+</section>
+
+<section class="section explore-section home-directory">
+  <div class="section-heading">
+    <p class="eyebrow">{{ t("Explore the temple") }}</p>
+    <h2>{{ t("Plan your temple visit with ease") }}</h2>
+    <p>{{ t("Read about the temple, check daily timings, book online services, view the gallery and contact the office from dedicated pages.") }}</p>
+  </div>
+  <div class="explore-grid">
+    <a class="explore-card" href="{{ url_for('services') }}">
+      <span>{{ t("Online booking") }}</span>
+      <strong>{{ t("Services") }}</strong>
+      <p>{{ t("Book darshan and vazhipadu offerings with secure checkout and receipts.") }}</p>
+    </a>
+    <a class="explore-card" href="{{ url_for('timings') }}">
+      <span>{{ t("Schedule") }}</span>
+      <strong>{{ t("Timings") }}</strong>
+      <p>{{ t("Check darshan slots, vazhipadu windows and temple visit guidance.") }}</p>
+    </a>
+    <a class="explore-card" href="{{ url_for('history') }}">
+      <span>{{ t("Temple") }}</span>
+      <strong>{{ t("History") }}</strong>
+      <p>{{ t("Read about the shrine, local worship tradition and annual festivals.") }}</p>
+    </a>
+    <a class="explore-card" href="{{ url_for('gallery') }}">
+      <span>{{ t("Photos") }}</span>
+      <strong>{{ t("Gallery") }}</strong>
+      <p>{{ t("View temple courtyard, premises and festival moments.") }}</p>
+    </a>
+    <a class="explore-card" href="{{ url_for('contact') }}">
+      <span>{{ t("Temple office") }}</span>
+      <strong>{{ t("Contact") }}</strong>
+      <p>{{ t("Reach the temple office for darshan guidance, vazhipadu details and booking-related support.") }}</p>
+    </a>
+    <a class="explore-card" href="{{ url_for('dashboard') }}">
+      <span>{{ t("Receipts") }}</span>
+      <strong>{{ t("My Bookings") }}</strong>
+      <p>{{ t("View and download receipts") }}</p>
+    </a>
+  </div>
+</section>
+{% endblock %}

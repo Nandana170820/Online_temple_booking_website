@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}{{ t("Login") }} | {{ t("Mangad Devi Temple") }}{% endblock %}
+{% block content %}
+<section class="auth-page">
+  <form class="auth-form" method="post">
+    <p class="eyebrow">{{ t("Welcome back") }}</p>
+    <h1>{{ t("Login") }}</h1>
+    <label>{{ t("Email") }}<input type="email" name="email" required></label>
+    <label>{{ t("Password") }}<input type="password" name="password" required></label>
+    <button class="button primary wide" type="submit">{{ t("Login") }}</button>
+    <p class="auth-link">{{ t("Admin access is reserved for temple office users.") }}</p>
+  </form>
+</section>
+{% endblock %}

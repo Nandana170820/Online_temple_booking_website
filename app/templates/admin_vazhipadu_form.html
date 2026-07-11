@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}{{ t("Vazhipadu Form | Mangad Devi Temple") }}{% endblock %}
+{% block content %}
+<section class="auth-page">
+  <form class="auth-form" method="post">
+    <p class="eyebrow">{{ t("Admin") }}</p>
+    <h1>{{ t("Edit" if service.id else "Add") }} {{ t("Vazhipadu") }}</h1>
+    <label>{{ t("Name") }}<input type="text" name="name" value="{{ service.name or '' }}" required></label>
+    <label>{{ t("Category") }}
+      <select name="category">
+        <option value="Vazhipadu" {% if service.category == "Vazhipadu" %}selected{% endif %}>{{ t("Vazhipadu") }}</option>
+        <option value="Darshan" {% if service.category == "Darshan" %}selected{% endif %}>{{ t("Darshan") }}</option>
+      </select>
+    </label>
+    <label>{{ t("Description") }}<textarea name="description" rows="4" required>{{ service.description or '' }}</textarea></label>
+    <label>{{ t("Price") }}<input type="number" step="0.01" name="price" value="{{ service.price or '0.00' }}" required></label>
+    <label>{{ t("Capacity per slot") }}<input type="number" name="capacity_per_slot" value="{{ service.capacity_per_slot or 40 }}" required></label>
+    <label class="check-row"><input type="checkbox" name="is_active" {% if service.is_active %}checked{% endif %}> {{ t("Active") }}</label>
+    <button class="button primary wide" type="submit">{{ t("Save") }}</button>
+  </form>
+</section>
+{% endblock %}

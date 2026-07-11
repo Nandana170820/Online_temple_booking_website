@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% block title %}{{ t("Booking") }} | {{ t("Mangad Devi Temple") }}{% endblock %}
+{% block content %}
+<section class="form-page">
+  <div class="form-intro">
+    <p class="eyebrow">{{ t("Online booking") }}</p>
+    <h1>{{ t("Reserve your temple visit") }}</h1>
+    <p>{{ t("Fill in the devotee details and preferred slot. Capacity is validated when you submit the form.") }}</p>
+    <div class="info-panel">
+      <strong>{{ t("Available slots") }}</strong>
+      <span>05:30, 06:30, 08:00, 10:00, 17:30, 19:00</span>
+    </div>
+  </div>
+
+  <form class="booking-form" method="post">
+    <label>{{ t("Service") }}
+      <select name="service_id" required>
+        <option value="">{{ t("Select service") }}</option>
+        {% for service in services %}
+          <option value="{{ service.id }}" {% if selected_service == service.id %}selected{% endif %}>
+            {{ t(service.name) }} - &#8377;{{ "%.0f"|format(service.price) }}
+          </option>
+        {% endfor %}
+      </select>
+    </label>
+
+    <div class="two-col">
+      <label>{{ t("Visit date") }}
+        <input type="date" name="visit_date" required>
+      </label>
+      <label>{{ t("Visit time") }}
+        <select name="visit_time" required>
+          <option value="05:30">{{ t("05:30 AM") }}</option>
+          <option value="06:30">{{ t("06:30 AM") }}</option>
+          <option value="08:00">{{ t("08:00 AM") }}</option>
+          <option value="10:00">{{ t("10:00 AM") }}</option>
+          <option value="17:30">{{ t("05:30 PM") }}</option>
+          <option value="19:00">{{ t("07:00 PM") }}</option>
+        </select>
+      </label>
+    </div>
+
+    <div class="two-col">
+      <label>{{ t("Devotee name") }}
+        <input type="text" name="devotee_name" value="{{ current_user.name if current_user.is_authenticated else '' }}" required>
+      </label>
+      <label>{{ t("Participants") }}
+        <input type="number" name="participants" min="1" max="100" value="1" required>
+      </label>
+    </div>
+
+    <div class="two-col">
+      <label>{{ t("Phone") }}
+        <input type="tel" name="devotee_phone" value="{{ current_user.phone if current_user.is_authenticated else '' }}" required>
+      </label>
+      <label>{{ t("Email") }}
+        <input type="email" name="devotee_email" value="{{ current_user.email if current_user.is_authenticated else '' }}" required>
+      </label>
+    </div>
+
+    <label>{{ t("Notes or nakshatra details") }}
+      <textarea name="notes" rows="4" placeholder="{{ t('Optional details for temple office') }}"></textarea>
+    </label>
+
+    <button class="button primary wide" type="submit">{{ t("Confirm Booking") }}</button>
+  </form>
+</section>
+{% endblock %}

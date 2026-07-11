@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}{{ t("Register") }} | {{ t("Mangad Devi Temple") }}{% endblock %}
+{% block content %}
+<section class="auth-page">
+  <form class="auth-form" method="post">
+    <p class="eyebrow">{{ t("Devotee account") }}</p>
+    <h1>{{ t("Create account") }}</h1>
+    <label>{{ t("Name") }}<input type="text" name="name" required></label>
+    <label>{{ t("Email") }}<input type="email" name="email" required></label>
+    <label>{{ t("Phone") }}<input type="tel" name="phone" required></label>
+    <label>{{ t("Password") }}<input type="password" name="password" minlength="6" required></label>
+    <button class="button primary wide" type="submit">{{ t("Register") }}</button>
+    <p class="auth-link">{{ t("Already registered?") }} <a href="{{ url_for('login') }}">{{ t("Login") }}</a></p>
+  </form>
+</section>
+{% endblock %}

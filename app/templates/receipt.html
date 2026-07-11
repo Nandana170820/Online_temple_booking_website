@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block title %}{{ t("Receipt") }} | {{ t("Mangad Devi Temple") }}{% endblock %}
+{% block content %}
+<section class="receipt-page">
+  <div class="receipt-sheet">
+    <div class="receipt-head">
+      <div>
+        <p class="eyebrow">{{ t("Temple receipt") }}</p>
+        <h1>{{ t("Mangad Devi Temple") }}</h1>
+        <span>{{ t("Kunnamkulam, Thrissur, Kerala") }}</span>
+      </div>
+      <strong>{{ booking.booking_code }}</strong>
+    </div>
+
+    <div class="receipt-status">
+      <span>{{ t(booking.status) }}</span>
+      <span>{{ t(booking.payment_status) }}</span>
+    </div>
+
+    <dl>
+      <div><dt>{{ t("Booking type") }}</dt><dd>{{ t(booking.booking_type) }}</dd></div>
+      <div><dt>{{ t("Service") }}</dt><dd>{{ t(booking.service.name if booking.service else booking.booking_type) }}</dd></div>
+      <div><dt>{{ t("Devotee") }}</dt><dd>{{ booking.devotee_name }}</dd></div>
+      <div><dt>{{ t("Mobile") }}</dt><dd>{{ booking.devotee_phone }}</dd></div>
+      <div><dt>{{ t("Email") }}</dt><dd>{{ booking.devotee_email }}</dd></div>
+      <div><dt>{{ t("Visit date") }}</dt><dd>{{ format_date(booking.visit_date) }}</dd></div>
+      <div><dt>{{ t("Time slot") }}</dt><dd>{{ format_time(booking.slot.slot_time) }}</dd></div>
+      <div><dt>{{ t("Participants") }}</dt><dd>{{ booking.participants }}</dd></div>
+      <div><dt>{{ t("Payment mode") }}</dt><dd>{{ t(booking.payment_mode or "Pending") }}</dd></div>
+      <div><dt>{{ t("Transaction ID") }}</dt><dd>{{ booking.transaction_id or t("Pending") }}</dd></div>
+      <div><dt>{{ t("Total amount") }}</dt><dd>&#8377;{{ "%.0f"|format(booking.total_amount) }}</dd></div>
+    </dl>
+
+    <div class="receipt-note">
+      <strong>{{ t("Visit instruction") }}</strong>
+      <p>{{ t("Please carry this receipt or booking ID during temple visit. The temple office may verify the mobile number used for booking.") }}</p>
+    </div>
+
+    <div class="hero-actions">
+      <a class="button primary" href="{{ url_for('receipt_pdf', code=booking.booking_code) }}" target="_blank">{{ t("Open PDF") }}</a>
+      <a class="button secondary" href="{{ url_for('receipt_pdf', code=booking.booking_code, download=1) }}">{{ t("Download PDF") }}</a>
+      <a class="button secondary" href="{{ url_for('dashboard') }}">{{ t("Booking History") }}</a>
+    </div>
+  </div>
+</section>
+{% endblock %}

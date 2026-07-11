@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% block title %}{{ t("Online Services") }} | {{ t("Mangad Devi Temple") }}{% endblock %}
+{% block content %}
+<section class="page-title image-title">
+  <p class="eyebrow">{{ t("Online services") }}</p>
+  <h1>{{ t("Darshan and vazhipadu booking") }}</h1>
+  <p>{{ t("Choose darshan or vazhipadu, enter devotee details, pay securely and save the temple receipt.") }}</p>
+</section>
+
+<section class="service-choice">
+  <a class="choice-panel darshan" href="{{ url_for('darshan_booking') }}">
+    <span>{{ t("Darshan") }}</span>
+    <h2>{{ t("Book temple visit slot") }}</h2>
+    <p>{{ t("Select a date, choose a darshan time and continue to secure checkout.") }}</p>
+  </a>
+  <a class="choice-panel vazhipadu" href="{{ url_for('vazhipadu_booking') }}">
+    <span>{{ t("Vazhipadu") }}</span>
+    <h2>{{ t("Book offerings online") }}</h2>
+    <p>{{ t("Choose offerings such as Archana, Neyvilakku, Pushpanjali and Bhagavathy Seva.") }}</p>
+  </a>
+</section>
+
+<section class="section compact">
+  <div class="section-heading">
+    <p class="eyebrow">{{ t("Service list") }}</p>
+    <h2>{{ t("Available online bookings") }}</h2>
+  </div>
+  <div class="service-grid">
+    {% for service in services %}
+      <article class="service-card">
+        <span>{{ t(service.category) }}</span>
+        <h3>{{ t(service.name) }}</h3>
+        <p>{{ t(service.description) }}</p>
+        <ul class="meta-list">
+          <li>{{ service.capacity_per_slot }} {{ t("devotees per slot") }}</li>
+          <li>{{ t("Online receipt after confirmation") }}</li>
+        </ul>
+        <div class="card-footer">
+          <strong>&#8377;{{ "%.0f"|format(service.price) }}</strong>
+          {% if service.category == "Vazhipadu" %}
+            <a href="{{ url_for('vazhipadu_booking', service_id=service.id) }}">{{ t("Book now") }}</a>
+          {% else %}
+            <a href="{{ url_for('darshan_booking') }}">{{ t("Book now") }}</a>
+          {% endif %}
+        </div>
+      </article>
+    {% endfor %}
+  </div>
+</section>
+
+<section class="process-band">
+  <div class="section-heading">
+    <p class="eyebrow">{{ t("Online checkout") }}</p>
+    <h2>{{ t("Secure online payment options") }}</h2>
+  </div>
+  <div class="payment-modes">
+    <span>UPI</span>
+    <span>{{ t("Credit / Debit Card") }}</span>
+    <span>{{ t("Net Banking") }}</span>
+    <span>{{ t("Wallet") }}</span>
+    <span>Razorpay</span>
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}{{ t("Admin") }} | {{ t("Mangad Devi Temple") }}{% endblock %}
+{% block content %}
+<section class="page-title image-title">
+  <p class="eyebrow">{{ t("Temple office") }}</p>
+  <h1>{{ t("Admin dashboard") }}</h1>
+</section>
+<section class="stats-band admin-stats">
+  <div><strong>{{ total_bookings }}</strong><span>{{ t("Total bookings") }}</span></div>
+  <div><strong>&#8377;{{ "%.0f"|format(total_revenue) }}</strong><span>{{ t("Revenue") }}</span></div>
+  <div><strong>{{ user_count }}</strong><span>{{ t("Users") }}</span></div>
+  <div><strong>{{ slot_count }}</strong><span>{{ t("Slots") }}</span></div>
+</section>
+<section class="admin-actions">
+  <a class="button primary" href="{{ url_for('admin_vazhipadu') }}">{{ t("Manage Vazhipadu") }}</a>
+  <a class="button secondary" href="{{ url_for('admin_slots') }}">{{ t("Manage Slots") }}</a>
+  <a class="button secondary" href="{{ url_for('admin_users') }}">{{ t("View Users") }}</a>
+  <a class="button secondary" href="{{ url_for('admin_bookings') }}">{{ t("View Bookings") }}</a>
+  <a class="button secondary" href="{{ url_for('admin_reports') }}">{{ t("Reports") }}</a>
+</section>
+<section class="table-section">
+  <table>
+    <thead><tr><th>{{ t("ID") }}</th><th>{{ t("Devotee") }}</th><th>{{ t("Type") }}</th><th>{{ t("Service") }}</th><th>{{ t("Date") }}</th><th>{{ t("Persons") }}</th><th>{{ t("Total") }}</th><th>{{ t("Payment") }}</th></tr></thead>
+    <tbody>
+      {% for booking in bookings %}
+        <tr>
+          <td>{{ booking.booking_code }}</td>
+          <td>{{ booking.devotee_name }}</td>
+          <td>{{ t(booking.booking_type) }}</td>
+          <td>{{ t(booking.service.name) }}</td>
+          <td>{{ format_date(booking.visit_date) }}</td>
+          <td>{{ booking.participants }}</td>
+          <td>&#8377;{{ "%.0f"|format(booking.total_amount) }}</td>
+          <td><span class="status">{{ t(booking.payment_status) }}</span></td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</section>
+{% endblock %}

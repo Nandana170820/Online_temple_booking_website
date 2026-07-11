@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block title %}{{ t("Temple History") }} | {{ t("Mangad Devi Temple") }}{% endblock %}
+{% block content %}
+<section class="history-hero page-hero">
+  <img src="{{ url_for('static', filename='images/temple-hero.png') }}" alt="{{ t('Mangad Devi Temple') }}">
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <p class="eyebrow">{{ t("Temple history") }}</p>
+    <h1>{{ t("Mangad Devi Temple, Kunnamkulam") }}</h1>
+    <p>{{ t("A Kerala Devi shrine rooted in local worship, festivals, lamps, offerings and community memories.") }}</p>
+  </div>
+</section>
+
+<section class="story-section">
+  <div class="story-lead">
+    <p class="eyebrow">{{ t("About the temple") }}</p>
+    <h2>{{ t("A local centre of Bhagavathy worship") }}</h2>
+    <p>{{ t("Mangad Devi Temple is a traditional Bhagavathy shrine at Mangad near Kunnamkulam in Thrissur district. The temple identity is shaped by Kerala's Devi worship traditions, where the Goddess is approached as a protective mother and guardian presence of the local community.") }}</p>
+    <p>{{ t("Daily lamps, offerings, family prayers, seasonal festivals and community participation give the temple its living character. The online services are kept separate from the heritage content so visitors can read, plan and book without confusion.") }}</p>
+  </div>
+  <aside class="heritage-card">
+    <span>{{ t("Temple profile") }}</span>
+    <div><strong>{{ t("Deity tradition") }}</strong><p>{{ t("Devi / Bhagavathy worship") }}</p></div>
+    <div><strong>{{ t("Location") }}</strong><p>{{ t("Mangad, Kunnamkulam, Kerala") }}</p></div>
+    <div><strong>{{ t("Website services") }}</strong><p>{{ t("Darshan, vazhipadu and receipt booking") }}</p></div>
+  </aside>
+</section>
+
+<section class="timeline-section">
+  <div class="section-heading">
+    <p class="eyebrow">{{ t("Temple life") }}</p>
+    <h2>{{ t("Worship, festivals and offerings") }}</h2>
+  </div>
+  <div class="timeline-grid">
+    <article>
+      <span>{{ t("Morning") }}</span>
+      <h3>{{ t("Daily darshan") }}</h3>
+      <p>{{ t("Devotees can plan their visit around early morning and evening darshan slots, with capacity handled through online booking.") }}</p>
+    </article>
+    <article>
+      <span>{{ t("Offerings") }}</span>
+      <h3>{{ t("Vazhipadu") }}</h3>
+      <p>{{ t("Archana, Neyvilakku, Pushpanjali and other offerings can be booked with devotee details and nakshatra notes.") }}</p>
+    </article>
+    <article>
+      <span>{{ t("Festival") }}</span>
+      <h3>{{ t("Community worship") }}</h3>
+      <p>{{ t("Annual festival dates, procession traditions, prasadam details and committee updates can be added as the temple office publishes them.") }}</p>
+    </article>
+  </div>
+</section>
+
+<section class="page-cta">
+  <div>
+    <p class="eyebrow">{{ t("Plan your visit") }}</p>
+    <h2>{{ t("Check timings before booking") }}</h2>
+  </div>
+  <a class="button primary" href="{{ url_for('timings') }}">{{ t("View Timings") }}</a>
+</section>
+{% endblock %}

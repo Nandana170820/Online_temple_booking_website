@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}{{ t("Gallery") }} | {{ t("Mangad Devi Temple") }}{% endblock %}
+{% block content %}
+<section class="page-title image-title">
+  <p class="eyebrow">{{ t("Temple gallery") }}</p>
+  <h1>{{ t("Photos from the temple premises") }}</h1>
+  <p>{{ t("A visual page for the temple courtyard, lamps, festival space and surroundings.") }}</p>
+</section>
+
+<section class="gallery-feature">
+  <img src="{{ url_for('static', filename='images/temple-hero.png') }}" alt="{{ t('Mangad Devi Temple') }}">
+  <div>
+    <p class="eyebrow">{{ t("Main courtyard") }}</p>
+    <h2>{{ t("Kerala temple setting with open worship space") }}</h2>
+    <p>{{ t("This page keeps temple photographs away from the booking forms, giving visitors a calm place to view the premises before planning a visit.") }}</p>
+  </div>
+</section>
+
+<section class="gallery-notes">
+  <article>
+    <span>{{ t("Courtyard") }}</span>
+    <h3>{{ t("Open temple premises") }}</h3>
+    <p>{{ t("The main photograph shows the courtyard and shrine approach used by devotees during regular visits.") }}</p>
+  </article>
+  <article>
+    <span>{{ t("Festivals") }}</span>
+    <h3>{{ t("Festival moments") }}</h3>
+    <p>{{ t("Additional festival and pooja photographs can be added here when the temple office provides them.") }}</p>
+  </article>
+  <article>
+    <span>{{ t("Visit") }}</span>
+    <h3>{{ t("Before arrival") }}</h3>
+    <p>{{ t("Visitors can check the premises, timings and booking details before planning darshan or vazhipadu.") }}</p>
+  </article>
+</section>
+{% endblock %}

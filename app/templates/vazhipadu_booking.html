@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% block title %}{{ t("Vazhipadu Booking") }} | {{ t("Mangad Devi Temple") }}{% endblock %}
+{% block content %}
+<section class="form-page">
+  <div class="form-intro">
+    <p class="eyebrow">{{ t("Vazhipadu booking") }}</p>
+    <h1>{{ t("Book offerings online") }}</h1>
+    <p>{{ t("Select an offering, submit devotee details and complete payment to receive the temple receipt.") }}</p>
+    <div class="info-grid">
+      <div class="info-panel">
+        <strong>{{ t("Name and nakshatra") }}</strong>
+        <span>{{ t("Add details in the notes field for archana and related offerings.") }}</span>
+      </div>
+      <div class="info-panel">
+        <strong>{{ t("Payment") }}</strong>
+        <span>{{ t("UPI, card, net banking, wallet and counter modes are included.") }}</span>
+      </div>
+    </div>
+  </div>
+
+  <form class="booking-form" method="post" data-booking-form>
+    <label>{{ t("Vazhipadu") }}
+      <select name="service_id" required data-service-select>
+        <option value="" data-price="0">{{ t("Select vazhipadu") }}</option>
+        {% for service in services %}
+          <option value="{{ service.id }}" data-price="{{ service.price }}" {% if selected_service == service.id %}selected{% endif %}>
+            {{ t(service.name) }} - &#8377;{{ "%.0f"|format(service.price) }}
+          </option>
+        {% endfor %}
+      </select>
+    </label>
+    <div class="two-col">
+      <label>{{ t("Date") }}
+        <input type="date" name="visit_date" required>
+      </label>
+      <label>{{ t("Time slot") }}
+        <select name="slot_id" required>
+          {% for slot in slots %}
+            <option value="{{ slot.id }}">{{ t(slot.name) }} - {{ format_time(slot.slot_time) }}</option>
+          {% endfor %}
+        </select>
+      </label>
+    </div>
+    <div class="two-col">
+      <label>{{ t("Devotee name") }}
+        <input type="text" name="devotee_name" value="{{ current_user.name }}" required>
+      </label>
+      <label>{{ t("Quantity / persons") }}
+        <input type="number" name="participants" min="1" value="1" required data-quantity-input>
+      </label>
+    </div>
+    <div class="two-col">
+      <label>{{ t("Mobile") }}
+        <input type="tel" name="devotee_phone" value="{{ current_user.phone }}" required>
+      </label>
+      <label>{{ t("Email") }}
+        <input type="email" name="devotee_email" value="{{ current_user.email }}" required>
+      </label>
+    </div>
+    <label>{{ t("Name / nakshatra details") }}
+      <textarea name="notes" rows="4" placeholder="{{ t('Example: Nanda, Rohini') }}"></textarea>
+    </label>
+    <div class="estimate-panel">
+      <span>{{ t("Estimated total") }}</span>
+      <strong data-total-amount>&#8377;0</strong>
+    </div>
+    <button class="button primary wide" type="submit">{{ t("Continue to Payment") }}</button>
+  </form>
+</section>
+{% endblock %}

@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %}{{ t("Contact") }} | {{ t("Mangad Devi Temple") }}{% endblock %}
+{% block content %}
+<section class="page-title image-title">
+  <p class="eyebrow">{{ t("Contact") }}</p>
+  <h1>{{ t("Mangad Devi Temple office") }}</h1>
+  <p>{{ t("Contact the temple office for booking support, visit guidance and vazhipadu enquiries.") }}</p>
+</section>
+
+<section class="contact-grid">
+  <div class="contact-stack">
+    <div class="info-panel contact-panel">
+      <strong>{{ t("Temple office") }}</strong>
+      <span>{{ t("Mangad, Kunnamkulam, Thrissur, Kerala") }}</span>
+      <span>{{ t("Phone: 04885 275090") }}</span>
+      <span>{{ t("Email: office@mangaddevitemple.local") }}</span>
+    </div>
+    <div class="map-panel">
+      <span>{{ t("Location") }}</span>
+      <strong>{{ t("Mangad, Kunnamkulam") }}</strong>
+      <p>{{ t("Reach the temple office for darshan guidance, vazhipadu details and booking-related support.") }}</p>
+    </div>
+  </div>
+
+  <form class="booking-form contact-form" method="post">
+    <p class="eyebrow">{{ t("Send enquiry") }}</p>
+    <h2>{{ t("Temple office message") }}</h2>
+    <label>{{ t("Name") }}
+      <input type="text" name="name" required>
+    </label>
+    <div class="two-col">
+      <label>{{ t("Mobile") }}
+        <input type="tel" name="phone" required>
+      </label>
+      <label>{{ t("Email") }}
+        <input type="email" name="email">
+      </label>
+    </div>
+    <label>{{ t("Message") }}
+      <textarea name="message" rows="5" placeholder="{{ t('Write your enquiry here') }}" required></textarea>
+    </label>
+    <button class="button primary wide" type="submit">{{ t("Submit Enquiry") }}</button>
+  </form>
+</section>
+{% endblock %}

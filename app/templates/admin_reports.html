@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}{{ t("Reports") }} | {{ t("Mangad Devi Temple") }}{% endblock %}
+{% block content %}
+<section class="page-title"><p class="eyebrow">{{ t("Admin") }}</p><h1>{{ t("Booking reports") }}</h1></section>
+<section class="table-section">
+  <table>
+    <thead><tr><th>{{ t("Booking Type") }}</th><th>{{ t("Total Bookings") }}</th><th>{{ t("Total Amount") }}</th></tr></thead>
+    <tbody>
+      {% for booking_type, count, total in rows %}
+        <tr><td>{{ t(booking_type) }}</td><td>{{ count }}</td><td>&#8377;{{ "%.0f"|format(total) }}</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</section>
+{% endblock %}

@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="{{ current_language }}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}{{ t("Mangad Devi Temple Online Services") }}{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}?v=public-20260711">
+</head>
+<body>
+  <div class="top-strip">
+    <span>{{ t("Temple online services portal") }}</span>
+    <span>{{ t("Temple Office: 04885 275090") }}</span>
+    <span>{{ t("Secure online booking and receipt download") }}</span>
+  </div>
+
+  <header class="site-header">
+    <a class="brand" href="{{ url_for('index') }}" aria-label="{{ t('Mangad Devi Temple') }}">
+      <span class="brand-mark">MD</span>
+      <span>
+        <strong>{{ t("Mangad Devi Temple") }}</strong>
+        <small>{{ t("Kunnamkulam, Thrissur") }}</small>
+      </span>
+    </a>
+
+    <div class="header-right">
+      <div class="language-switch" aria-label="{{ t('Language') }}">
+        <a class="{{ 'is-active' if current_language == 'en' else '' }}" href="{{ url_for('set_language', language='en') }}">English</a>
+        <a class="{{ 'is-active' if current_language == 'ml' else '' }}" href="{{ url_for('set_language', language='ml') }}">മലയാളം</a>
+      </div>
+
+      <nav class="nav" aria-label="Primary navigation">
+        <a class="{{ 'is-active' if request.endpoint == 'index' else '' }}" href="{{ url_for('index') }}">{{ t("Home") }}</a>
+        <a class="{{ 'is-active' if request.endpoint == 'services' else '' }}" href="{{ url_for('services') }}">{{ t("Services") }}</a>
+        <a class="{{ 'is-active' if request.endpoint == 'timings' else '' }}" href="{{ url_for('timings') }}">{{ t("Timings") }}</a>
+        <a class="{{ 'is-active' if request.endpoint == 'history' else '' }}" href="{{ url_for('history') }}">{{ t("History") }}</a>
+        <a class="{{ 'is-active' if request.endpoint == 'gallery' else '' }}" href="{{ url_for('gallery') }}">{{ t("Gallery") }}</a>
+        <a class="{{ 'is-active' if request.endpoint == 'contact' else '' }}" href="{{ url_for('contact') }}">{{ t("Contact") }}</a>
+        {% if current_user.is_authenticated %}
+          <a class="{{ 'is-active' if request.endpoint == 'dashboard' else '' }}" href="{{ url_for('dashboard') }}">{{ t("My Bookings") }}</a>
+          {% if current_user.is_admin %}
+            <a class="{{ 'is-active' if request.endpoint and request.endpoint.startswith('admin') else '' }}" href="{{ url_for('admin') }}">{{ t("Admin") }}</a>
+          {% endif %}
+          <a class="nav-button subtle" href="{{ url_for('logout') }}">{{ t("Logout") }}</a>
+        {% else %}
+          <a class="nav-button subtle" href="{{ url_for('login') }}">{{ t("Login") }}</a>
+          <a class="nav-button" href="{{ url_for('register') }}">{{ t("Register") }}</a>
+        {% endif %}
+      </nav>
+    </div>
+  </header>
+
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      <div class="flash-wrap" role="status" aria-live="polite">
+        {% for category, message in messages %}
+          <div class="flash {{ category }}">{{ t(message) }}</div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  {% endwith %}
+
+  <main>
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="footer">
+    <div>
+      <strong>{{ t("Mangad Devi Temple") }}</strong>
+      <p>{{ t("Kunnamkulam, Thrissur, Kerala") }}</p>
+    </div>
+    <div>
+      <a href="{{ url_for('history') }}">{{ t("History") }}</a>
+      <a href="{{ url_for('timings') }}">{{ t("Timings") }}</a>
+      <a href="{{ url_for('services') }}">{{ t("Services") }}</a>
+      <a href="{{ url_for('contact') }}">{{ t("Contact") }}</a>
+    </div>
+    <p>&copy; {{ current_year }} {{ t("Temple Online Booking System") }}</p>
+  </footer>
+
+  <script src="{{ url_for('static', filename='js/main.js') }}?v=public-20260711"></script>
+</body>
+</html>

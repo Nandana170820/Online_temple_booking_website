@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block title %}{{ t("Payment") }} | {{ t("Mangad Devi Temple") }}{% endblock %}
+{% block content %}
+<section class="payment-page enhanced-payment">
+  <div class="payment-summary">
+    <p class="eyebrow">{{ t("Booking review") }}</p>
+    <h1>&#8377;{{ "%.0f"|format(booking.total_amount) }}</h1>
+    <p>{{ t("Review your booking and continue to secure online payment.") }}</p>
+    <dl>
+      <div><dt>{{ t("Booking ID") }}</dt><dd>{{ booking.booking_code }}</dd></div>
+      <div><dt>{{ t("Service") }}</dt><dd>{{ t(booking.service.name if booking.service else booking.booking_type) }}</dd></div>
+      <div><dt>{{ t("Type") }}</dt><dd>{{ t(booking.booking_type) }}</dd></div>
+      <div><dt>{{ t("Date") }}</dt><dd>{{ format_date(booking.visit_date) }}</dd></div>
+      <div><dt>{{ t("Slot") }}</dt><dd>{{ format_time(booking.slot.slot_time) }}</dd></div>
+      <div><dt>{{ t("Devotees") }}</dt><dd>{{ booking.participants }}</dd></div>
+    </dl>
+    <div class="payment-progress">
+      <span class="done">{{ t("Booking") }}</span>
+      <span class="active">{{ t("Payment") }}</span>
+      <span>{{ t("Receipt") }}</span>
+    </div>
+  </div>
+
+  <form
+    class="payment-form checkout-panel razorpay-card"
+    method="post"
+    data-razorpay-form
+    data-key="{{ razorpay_key_id }}"
+    data-order-id="{{ razorpay_order.id if razorpay_order else '' }}"
+    data-amount="{{ razorpay_order.amount if razorpay_order else (booking.total_amount * 100)|int }}"
+    data-currency="{{ razorpay_order.currency if razorpay_order else 'INR' }}"
+    data-name="{{ t('Mangad Devi Temple') }}"
+    data-description="{{ t(booking.service.name if booking.service else booking.booking_type) }}"
+    data-prefill-name="{{ booking.devotee_name }}"
+    data-prefill-email="{{ booking.devotee_email }}"
+    data-prefill-contact="{{ booking.devotee_phone }}"
+    data-unavailable-text="{{ t('Payment gateway unavailable') }}"
+  >
+    <p class="eyebrow">{{ t("Secure checkout") }}</p>
+    <h2>{{ t("Pay with Razorpay") }}</h2>
+    <div class="razorpay-brand">
+      <span>UPI</span>
+      <span>{{ t("Cards") }}</span>
+      <span>{{ t("Net Banking") }}</span>
+      <span>{{ t("Wallets") }}</span>
+    </div>
+    <input type="hidden" name="razorpay_payment_id" data-razorpay-payment-id>
+    <input type="hidden" name="razorpay_order_id" data-razorpay-order-id>
+    <input type="hidden" name="razorpay_signature" data-razorpay-signature>
+    <div class="payable-panel">
+      <span>{{ t("Amount payable") }}</span>
+      <strong>&#8377;{{ "%.0f"|format(booking.total_amount) }}</strong>
+    </div>
+    <button class="button primary wide" type="button" data-razorpay-button {% if not razorpay_ready %}disabled{% endif %}>{{ t("Pay Securely") }}</button>
+    <noscript>
+      <p class="auth-link">{{ t("Enable JavaScript to open Razorpay Checkout.") }}</p>
+    </noscript>
+  </form>
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+</section>
+{% endblock %}

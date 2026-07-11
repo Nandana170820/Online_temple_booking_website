@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %}{{ t("My Bookings") }} | {{ t("Mangad Devi Temple") }}{% endblock %}
+{% block content %}
+<section class="page-title image-title">
+  <p class="eyebrow">{{ t("My bookings") }}</p>
+  <h1>{{ t("Booking history") }}</h1>
+  <div class="hero-actions">
+    <a class="button primary" href="{{ url_for('darshan_booking') }}">{{ t("Book Darshan") }}</a>
+    <a class="button secondary" href="{{ url_for('vazhipadu_booking') }}">{{ t("Book Vazhipadu") }}</a>
+  </div>
+</section>
+<section class="table-section">
+  {% if bookings %}
+    <table>
+      <thead><tr><th>{{ t("ID") }}</th><th>{{ t("Type") }}</th><th>{{ t("Service") }}</th><th>{{ t("Date") }}</th><th>{{ t("Slot") }}</th><th>{{ t("Payment") }}</th><th>{{ t("Total") }}</th><th>{{ t("Receipt") }}</th></tr></thead>
+      <tbody>
+        {% for booking in bookings %}
+          <tr>
+            <td>{{ booking.booking_code }}</td>
+            <td>{{ t(booking.booking_type) }}</td>
+            <td>{{ t(booking.service.name) }}</td>
+            <td>{{ format_date(booking.visit_date) }}</td>
+            <td>{{ format_time(booking.slot.slot_time) }}</td>
+            <td><span class="status">{{ t(booking.payment_status) }}</span></td>
+            <td>&#8377;{{ "%.0f"|format(booking.total_amount) }}</td>
+            <td>
+              {% if booking.payment_status == "Paid" %}
+                <a href="{{ url_for('receipt', code=booking.booking_code) }}">{{ t("View") }}</a>
+              {% else %}
+                <a href="{{ url_for('payment', code=booking.booking_code) }}">{{ t("Pay") }}</a>
+              {% endif %}
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <div class="empty-state">
+      <h2>{{ t("No bookings yet") }}</h2>
+      <p>{{ t("Your darshan and vazhipadu bookings will appear here.") }}</p>
+      <a class="button primary" href="{{ url_for('darshan_booking') }}">{{ t("Book now") }}</a>
+    </div>
+  {% endif %}
+</section>
+{% endblock %}

@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}{{ t("Users") }} | {{ t("Mangad Devi Temple") }}{% endblock %}
+{% block content %}
+<section class="page-title"><p class="eyebrow">{{ t("Admin") }}</p><h1>{{ t("Registered users") }}</h1></section>
+<section class="table-section">
+  <table>
+    <thead><tr><th>{{ t("Name") }}</th><th>{{ t("Email") }}</th><th>{{ t("Mobile") }}</th><th>{{ t("Role") }}</th><th>{{ t("Joined") }}</th></tr></thead>
+    <tbody>
+      {% for user in users %}
+        <tr><td>{{ user.name }}</td><td>{{ user.email }}</td><td>{{ user.phone }}</td><td>{{ t("Admin" if user.is_admin else "User") }}</td><td>{{ format_date(user.created_at) }}</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</section>
+{% endblock %}

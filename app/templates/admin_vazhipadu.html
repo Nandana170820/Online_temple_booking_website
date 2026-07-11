@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}{{ t("Manage Vazhipadu") }} | {{ t("Mangad Devi Temple") }}{% endblock %}
+{% block content %}
+<section class="page-title">
+  <p class="eyebrow">{{ t("Admin") }}</p>
+  <h1>{{ t("Manage vazhipadu") }}</h1>
+  <a class="button primary" href="{{ url_for('admin_vazhipadu_form') }}">{{ t("Add Vazhipadu") }}</a>
+</section>
+<section class="table-section">
+  <table>
+    <thead><tr><th>{{ t("Name") }}</th><th>{{ t("Category") }}</th><th>{{ t("Price") }}</th><th>{{ t("Capacity") }}</th><th>{{ t("Status") }}</th><th>{{ t("Actions") }}</th></tr></thead>
+    <tbody>
+      {% for service in services %}
+        <tr>
+          <td>{{ t(service.name) }}</td>
+          <td>{{ t(service.category) }}</td>
+          <td>&#8377;{{ "%.0f"|format(service.price) }}</td>
+          <td>{{ service.capacity_per_slot }}</td>
+          <td>{{ t("Active" if service.is_active else "Inactive") }}</td>
+          <td class="action-cell">
+            <a href="{{ url_for('admin_vazhipadu_form', service_id=service.id) }}">{{ t("Edit") }}</a>
+            <form method="post" action="{{ url_for('admin_vazhipadu_delete', service_id=service.id) }}">
+              <button type="submit">{{ t("Delete") }}</button>
+            </form>
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</section>
+{% endblock %}

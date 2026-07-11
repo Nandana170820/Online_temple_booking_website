@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}{{ t("Manage Slots") }} | {{ t("Mangad Devi Temple") }}{% endblock %}
+{% block content %}
+<section class="form-page">
+  <div class="form-intro">
+    <p class="eyebrow">{{ t("Admin") }}</p>
+    <h1>{{ t("Manage slots") }}</h1>
+    <p>{{ t("Add darshan and vazhipadu time slots. Disable a slot when booking should stop.") }}</p>
+  </div>
+  <form class="booking-form" method="post">
+    <label>{{ t("Slot name") }}<input type="text" name="name" required></label>
+    <div class="two-col">
+      <label>{{ t("Time") }}<input type="time" name="slot_time" required></label>
+      <label>{{ t("Category") }}
+        <select name="category"><option value="Darshan">{{ t("Darshan") }}</option><option value="Vazhipadu">{{ t("Vazhipadu") }}</option></select>
+      </label>
+    </div>
+    <label>{{ t("Capacity") }}<input type="number" name="capacity" min="1" value="80" required></label>
+    <button class="button primary wide" type="submit">{{ t("Add Slot") }}</button>
+  </form>
+</section>
+<section class="table-section">
+  <table>
+    <thead><tr><th>{{ t("Category") }}</th><th>{{ t("Name") }}</th><th>{{ t("Time") }}</th><th>{{ t("Capacity") }}</th><th>{{ t("Status") }}</th><th>{{ t("Action") }}</th></tr></thead>
+    <tbody>
+      {% for slot in slots %}
+        <tr>
+          <td>{{ t(slot.category) }}</td><td>{{ t(slot.name) }}</td><td>{{ format_time(slot.slot_time) }}</td><td>{{ slot.capacity }}</td><td>{{ t("Active" if slot.is_active else "Disabled") }}</td>
+          <td><form method="post" action="{{ url_for('admin_slot_toggle', slot_id=slot.id) }}"><button type="submit">{{ t("Toggle") }}</button></form></td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</section>
+{% endblock %}

@@ -7,6 +7,7 @@
   <div class="hero-actions">
     <a class="button primary" href="{{ url_for('darshan_booking') }}">{{ t("Book Darshan") }}</a>
     <a class="button secondary" href="{{ url_for('vazhipadu_booking') }}">{{ t("Book Vazhipadu") }}</a>
+    <a class="button secondary" href="{{ url_for('marriage_booking') }}">{{ t("Book Marriage") }}</a>
   </div>
 </section>
 <section class="table-section">
@@ -37,7 +38,7 @@
   {% else %}
     <div class="empty-state">
       <h2>{{ t("No bookings yet") }}</h2>
-      <p>{{ t("Your darshan and vazhipadu bookings will appear here.") }}</p>
+      <p>{{ t("Your darshan, vazhipadu and marriage bookings will appear here.") }}</p>
       <a class="button primary" href="{{ url_for('darshan_booking') }}">{{ t("Book now") }}</a>
     </div>
   {% endif %}

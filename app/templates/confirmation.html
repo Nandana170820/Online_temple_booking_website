@@ -17,6 +17,9 @@
       <div><dt>{{ t("Status") }}</dt><dd>{{ t(booking.status) }}</dd></div>
       <div><dt>{{ t("Payment") }}</dt><dd>{{ t(booking.payment_status) }} - {{ t(booking.payment_mode) }}</dd></div>
       <div><dt>{{ t("Transaction") }}</dt><dd>{{ booking.transaction_id }}</dd></div>
+      {% if booking.notes %}
+        <div class="booking-notes"><dt>{{ t("Booking notes") }}</dt><dd>{{ booking.notes | replace('\n', '<br>') | safe }}</dd></div>
+      {% endif %}
     </dl>
     <div class="hero-actions">
       <a class="button primary" href="{{ url_for('receipt', code=booking.booking_code) }}">{{ t("View Receipt") }}</a>

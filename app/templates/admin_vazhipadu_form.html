@@ -10,6 +10,7 @@
       <select name="category">
         <option value="Vazhipadu" {% if service.category == "Vazhipadu" %}selected{% endif %}>{{ t("Vazhipadu") }}</option>
         <option value="Darshan" {% if service.category == "Darshan" %}selected{% endif %}>{{ t("Darshan") }}</option>
+        <option value="Marriage" {% if service.category == "Marriage" %}selected{% endif %}>{{ t("Marriage") }}</option>
       </select>
     </label>
     <label>{{ t("Description") }}<textarea name="description" rows="4" required>{{ service.description or '' }}</textarea></label>

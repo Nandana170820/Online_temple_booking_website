@@ -11,6 +11,7 @@
     <div class="hero-actions">
       <a class="button primary" href="{{ url_for('darshan_booking') }}">{{ t("Book Darshan") }}</a>
       <a class="button secondary" href="{{ url_for('vazhipadu_booking') }}">{{ t("Book Vazhipadu") }}</a>
+      <a class="button secondary" href="{{ url_for('marriage_booking') }}">{{ t("Book Marriage") }}</a>
     </div>
   </div>
   <aside class="hero-panel" aria-label="{{ t('Today at the temple') }}">
@@ -36,8 +37,13 @@
     <strong>{{ t("Services") }}</strong>
     <small>{{ t("Available online bookings") }}</small>
   </a>
-  <a href="{{ url_for('timings') }}">
+  <a href="{{ url_for('marriage_booking') }}">
     <span>04</span>
+    <strong>{{ t("Marriage Booking") }}</strong>
+    <small>{{ t("Bride and groom details") }}</small>
+  </a>
+  <a href="{{ url_for('timings') }}">
+    <span>05</span>
     <strong>{{ t("Timings") }}</strong>
     <small>{{ t("Darshan and pooja schedule") }}</small>
   </a>
@@ -50,7 +56,7 @@
   </div>
   <div>
     <span>{{ t("Online booking") }}</span>
-    <strong>{{ t("Darshan and vazhipadu slots") }}</strong>
+    <strong>{{ t("Darshan, vazhipadu and marriage slots") }}</strong>
   </div>
   <div>
     <span>{{ t("Receipts") }}</span>
@@ -68,7 +74,7 @@
     <a class="explore-card" href="{{ url_for('services') }}">
       <span>{{ t("Online booking") }}</span>
       <strong>{{ t("Services") }}</strong>
-      <p>{{ t("Book darshan and vazhipadu offerings with secure checkout and receipts.") }}</p>
+      <p>{{ t("Book darshan, vazhipadu and marriage services with secure checkout and receipts.") }}</p>
     </a>
     <a class="explore-card" href="{{ url_for('timings') }}">
       <span>{{ t("Schedule") }}</span>

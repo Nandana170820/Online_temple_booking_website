@@ -29,6 +29,9 @@
       <div><dt>{{ t("Payment mode") }}</dt><dd>{{ t(booking.payment_mode or "Pending") }}</dd></div>
       <div><dt>{{ t("Transaction ID") }}</dt><dd>{{ booking.transaction_id or t("Pending") }}</dd></div>
       <div><dt>{{ t("Total amount") }}</dt><dd>&#8377;{{ "%.0f"|format(booking.total_amount) }}</dd></div>
+      {% if booking.notes %}
+        <div class="booking-notes"><dt>{{ t("Booking notes") }}</dt><dd>{{ booking.notes | replace('\n', '<br>') | safe }}</dd></div>
+      {% endif %}
     </dl>
 
     <div class="receipt-note">

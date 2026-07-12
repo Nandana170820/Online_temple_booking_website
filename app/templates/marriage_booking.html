@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+{% block title %}{{ t("Marriage Booking") }} | {{ t("Mangad Devi Temple") }}{% endblock %}
+{% block content %}
+<section class="form-page">
+  <div class="form-intro">
+    <p class="eyebrow">{{ t("Marriage booking") }}</p>
+    <h1>{{ t("Book marriage slot") }}</h1>
+    <p>{{ t("Reserve a temple marriage muhurtham slot and submit bride, groom and family contact details for office verification.") }}</p>
+    <div class="info-grid">
+      <div class="info-panel">
+        <strong>{{ t("Marriage registration fee") }}</strong>
+        <span>&#8377;{{ "%.0f"|format(service.price) }} {{ t("per ceremony") }}</span>
+      </div>
+      <div class="info-panel">
+        <strong>{{ t("Documents") }}</strong>
+        <span>{{ t("Carry ID proof and required documents during temple office verification.") }}</span>
+      </div>
+    </div>
+  </div>
+
+  <form class="booking-form" method="post" data-booking-form data-unit-price="{{ service.price }}">
+    <input type="hidden" name="participants" value="1">
+    <div class="form-banner">
+      <strong>{{ t("Temple Marriage Booking") }}</strong>
+      <span>{{ t("Slot is confirmed only after payment and temple office verification.") }}</span>
+    </div>
+    <div class="two-col">
+      <label>{{ t("Marriage date") }}
+        <input type="date" name="visit_date" required>
+      </label>
+      <label>{{ t("Muhurtham slot") }}
+        <select name="slot_id" required>
+          {% for slot in slots %}
+            <option value="{{ slot.id }}">{{ t(slot.name) }} - {{ format_time(slot.slot_time) }}</option>
+          {% endfor %}
+        </select>
+      </label>
+    </div>
+    <div class="two-col">
+      <label>{{ t("Bride name") }}
+        <input type="text" name="bride_name" required>
+      </label>
+      <label>{{ t("Groom name") }}
+        <input type="text" name="groom_name" required>
+      </label>
+    </div>
+    <div class="two-col">
+      <label>{{ t("Bride details") }}
+        <input type="text" name="bride_details" placeholder="{{ t('Age, nakshatra or ID note') }}">
+      </label>
+      <label>{{ t("Groom details") }}
+        <input type="text" name="groom_details" placeholder="{{ t('Age, nakshatra or ID note') }}">
+      </label>
+    </div>
+    <div class="two-col">
+      <label>{{ t("Contact person") }}
+        <input type="text" name="devotee_name" value="{{ current_user.name }}" required>
+      </label>
+      <label>{{ t("Expected guests") }}
+        <input type="number" name="expected_guests" min="1" value="20">
+      </label>
+    </div>
+    <div class="two-col">
+      <label>{{ t("Mobile") }}
+        <input type="tel" name="devotee_phone" value="{{ current_user.phone }}" required>
+      </label>
+      <label>{{ t("Email") }}
+        <input type="email" name="devotee_email" value="{{ current_user.email }}" required>
+      </label>
+    </div>
+    <label>{{ t("Address / ID note") }}
+      <textarea name="family_note" rows="3" placeholder="{{ t('Address, ID proof note or family reference') }}"></textarea>
+    </label>
+    <label>{{ t("Additional temple office note") }}
+      <textarea name="notes" rows="3" placeholder="{{ t('Optional temple office note') }}"></textarea>
+    </label>
+    <div class="estimate-panel">
+      <span>{{ t("Estimated total") }}</span>
+      <strong data-total-amount>&#8377;{{ "%.0f"|format(service.price) }}</strong>
+    </div>
+    <button class="button primary wide" type="submit">{{ t("Continue to Payment") }}</button>
+  </form>
+</section>
+{% endblock %}

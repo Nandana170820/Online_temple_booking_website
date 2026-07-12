@@ -45,11 +45,12 @@
 <section class="page-cta">
   <div>
     <p class="eyebrow">{{ t("Ready to book") }}</p>
-    <h2>{{ t("Select darshan or vazhipadu") }}</h2>
+    <h2>{{ t("Select darshan, vazhipadu or marriage") }}</h2>
   </div>
   <div class="hero-actions">
     <a class="button primary" href="{{ url_for('darshan_booking') }}">{{ t("Book Darshan") }}</a>
     <a class="button secondary" href="{{ url_for('vazhipadu_booking') }}">{{ t("Book Vazhipadu") }}</a>
+    <a class="button secondary" href="{{ url_for('marriage_booking') }}">{{ t("Book Marriage") }}</a>
   </div>
 </section>
 {% endblock %}

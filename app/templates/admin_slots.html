@@ -5,14 +5,18 @@
   <div class="form-intro">
     <p class="eyebrow">{{ t("Admin") }}</p>
     <h1>{{ t("Manage slots") }}</h1>
-    <p>{{ t("Add darshan and vazhipadu time slots. Disable a slot when booking should stop.") }}</p>
+    <p>{{ t("Add darshan, vazhipadu and marriage time slots. Disable a slot when booking should stop.") }}</p>
   </div>
   <form class="booking-form" method="post">
     <label>{{ t("Slot name") }}<input type="text" name="name" required></label>
     <div class="two-col">
       <label>{{ t("Time") }}<input type="time" name="slot_time" required></label>
       <label>{{ t("Category") }}
-        <select name="category"><option value="Darshan">{{ t("Darshan") }}</option><option value="Vazhipadu">{{ t("Vazhipadu") }}</option></select>
+        <select name="category">
+          <option value="Darshan">{{ t("Darshan") }}</option>
+          <option value="Vazhipadu">{{ t("Vazhipadu") }}</option>
+          <option value="Marriage">{{ t("Marriage") }}</option>
+        </select>
       </label>
     </div>
     <label>{{ t("Capacity") }}<input type="number" name="capacity" min="1" value="80" required></label>

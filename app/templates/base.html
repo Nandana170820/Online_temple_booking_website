@@ -4,9 +4,13 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{% block title %}{{ t("Mangad Devi Temple Online Services") }}{% endblock %}</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}?v=public-20260711">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}?v=marriage-20260712">
 </head>
-<body>
+<body
+  data-invalid-email-message="{{ t('Please enter a valid email address.') }}"
+  data-required-message="{{ t('Please fill all required fields.') }}"
+  data-minlength-message="{{ t('Please check the minimum length.') }}"
+>
   <div class="top-strip">
     <span>{{ t("Temple online services portal") }}</span>
     <span>{{ t("Temple Office: 04885 275090") }}</span>
@@ -53,7 +57,10 @@
     {% if messages %}
       <div class="flash-wrap" role="status" aria-live="polite">
         {% for category, message in messages %}
-          <div class="flash {{ category }}">{{ t(message) }}</div>
+          <div class="flash {{ category }}">
+            <span>{{ t(message) }}</span>
+            <button type="button" aria-label="{{ t('Dismiss message') }}" data-flash-close>&times;</button>
+          </div>
         {% endfor %}
       </div>
     {% endif %}
@@ -77,6 +84,6 @@
     <p>&copy; {{ current_year }} {{ t("Temple Online Booking System") }}</p>
   </footer>
 
-  <script src="{{ url_for('static', filename='js/main.js') }}?v=public-20260711"></script>
+  <script src="{{ url_for('static', filename='js/main.js') }}?v=marriage-20260712"></script>
 </body>
 </html>

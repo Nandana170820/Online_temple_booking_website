@@ -3,6 +3,7 @@ import base64
 import hashlib
 import hmac
 import json
+import re
 import urllib.error
 import urllib.request
 from datetime import date, datetime
@@ -48,6 +49,7 @@ else:
 db = SQLAlchemy()
 login_manager = LoginManager()
 login_manager.login_view = "login"
+EMAIL_PATTERN = re.compile(r"^[^@\s]+@[^@\s]+\.[^@\s]+$")
 
 
 class User(UserMixin, db.Model):
@@ -205,6 +207,13 @@ def seed_database():
             "price": Decimal("20.00"),
             "capacity_per_slot": 120,
         },
+        {
+            "name": "Temple Marriage Booking",
+            "category": "Marriage",
+            "description": "Marriage registration slot with bride and groom details recorded for temple office verification.",
+            "price": Decimal("500.00"),
+            "capacity_per_slot": 1,
+        },
     ]
     for seed in service_seeds:
         service = Service.query.filter_by(name=seed["name"]).first()
@@ -220,6 +229,8 @@ def seed_database():
         ("Deeparadhana Darshan", "18:30", "Darshan", 100),
         ("Vazhipadu Morning", "07:00", "Vazhipadu", 70),
         ("Vazhipadu Evening", "18:30", "Vazhipadu", 70),
+        ("Marriage Muhurtham Morning", "06:00", "Marriage", 4),
+        ("Marriage Muhurtham Forenoon", "09:00", "Marriage", 4),
     ]
     for name, slot_time, category, capacity in slot_seeds:
         slot = Slot.query.filter_by(name=name, category=category).first()
@@ -246,6 +257,17 @@ def admin_required():
         flash("Admin access required.", "error")
         return False
     return True
+
+
+def is_valid_email(email):
+    return bool(email and EMAIL_PATTERN.match(email))
+
+
+def booking_endpoint(booking_type):
+    return {
+        "Vazhipadu": "vazhipadu_booking",
+        "Marriage": "marriage_booking",
+    }.get(booking_type, "darshan_booking")
 
 
 def razorpay_is_ready(app):
@@ -348,6 +370,10 @@ def register_routes(app):
     @app.route("/contact", methods=["GET", "POST"])
     def contact():
         if request.method == "POST":
+            email = request.form.get("email", "").strip()
+            if email and not is_valid_email(email):
+                flash("Please enter a valid email address.", "error")
+                return redirect(url_for("contact"))
             flash("Your enquiry has been noted. The temple office will contact you if follow-up is required.", "success")
             return redirect(url_for("contact"))
         return render_template("contact.html")
@@ -371,6 +397,30 @@ def register_routes(app):
             service = db.session.get(Service, request.form.get("service_id", type=int))
             return create_booking("Vazhipadu", service)
         return render_template("vazhipadu_booking.html", services=services, slots=slots, selected_service=selected_service)
+
+    @app.route("/marriage-booking", methods=["GET", "POST"])
+    @login_required
+    def marriage_booking():
+        service = Service.query.filter_by(category="Marriage", is_active=True).first()
+        slots = Slot.query.filter_by(category="Marriage", is_active=True).order_by(Slot.slot_time).all()
+        if request.method == "POST":
+            required_fields = ["bride_name", "groom_name", "devotee_name", "devotee_phone", "devotee_email"]
+            if any(not request.form.get(field, "").strip() for field in required_fields):
+                flash("Please fill all required fields.", "error")
+                return redirect(url_for("marriage_booking"))
+
+            expected_guests = request.form.get("expected_guests", "").strip() or "Not specified"
+            marriage_notes = [
+                f"Bride: {request.form['bride_name'].strip()}",
+                f"Groom: {request.form['groom_name'].strip()}",
+                f"Bride details: {request.form.get('bride_details', '').strip() or 'Not specified'}",
+                f"Groom details: {request.form.get('groom_details', '').strip() or 'Not specified'}",
+                f"Expected guests: {expected_guests}",
+                f"Address / ID note: {request.form.get('family_note', '').strip() or 'Not specified'}",
+                f"Temple office note: {request.form.get('notes', '').strip() or 'None'}",
+            ]
+            return create_booking("Marriage", service, participants_override=1, notes_override="\n".join(marriage_notes))
+        return render_template("marriage_booking.html", service=service, slots=slots)
 
     @app.route("/book")
     def book():
@@ -446,6 +496,9 @@ def register_routes(app):
     def register():
         if request.method == "POST":
             email = request.form["email"].strip().lower()
+            if not is_valid_email(email):
+                flash("Please enter a valid email address.", "error")
+                return redirect(url_for("register"))
             if User.query.filter_by(email=email).first():
                 flash("An account already exists with this email.", "error")
                 return redirect(url_for("register"))
@@ -454,14 +507,18 @@ def register_routes(app):
             db.session.add(user)
             db.session.commit()
             login_user(user)
-            flash("Account created. You can now book darshan and vazhipadu.", "success")
+            flash("Account created. You can now book darshan, vazhipadu and marriage slots.", "success")
             return redirect(url_for("dashboard"))
         return render_template("register.html")
 
     @app.route("/login", methods=["GET", "POST"])
     def login():
         if request.method == "POST":
-            user = User.query.filter_by(email=request.form["email"].strip().lower()).first()
+            email = request.form["email"].strip().lower()
+            if not is_valid_email(email):
+                flash("Please enter a valid email address.", "error")
+                return redirect(url_for("login"))
+            user = User.query.filter_by(email=email).first()
             if not user or not user.check_password(request.form["password"]):
                 flash("Invalid email or password.", "error")
                 return redirect(url_for("login"))
@@ -605,28 +662,34 @@ def register_routes(app):
         return render_template("admin_reports.html", rows=rows)
 
 
-def create_booking(booking_type, service):
+def create_booking(booking_type, service, participants_override=None, notes_override=None):
+    redirect_target = booking_endpoint(booking_type)
     if not service:
         flash("Please choose a valid service.", "error")
-        return redirect(url_for("vazhipadu_booking" if booking_type == "Vazhipadu" else "darshan_booking"))
+        return redirect(url_for(redirect_target))
 
     try:
         visit_date = datetime.strptime(request.form["visit_date"], "%Y-%m-%d").date()
-        participants = int(request.form["participants"])
+        participants = participants_override if participants_override is not None else int(request.form["participants"])
         slot = db.session.get(Slot, request.form.get("slot_id", type=int))
     except (ValueError, KeyError):
         flash("Please enter valid date, slot and participant details.", "error")
-        return redirect(url_for("vazhipadu_booking" if booking_type == "Vazhipadu" else "darshan_booking"))
+        return redirect(url_for(redirect_target))
 
     if not slot or slot.category != booking_type:
         flash("Please choose a valid time slot.", "error")
-        return redirect(url_for("vazhipadu_booking" if booking_type == "Vazhipadu" else "darshan_booking"))
+        return redirect(url_for(redirect_target))
     if visit_date < date.today():
         flash("Please select today or a future date.", "error")
-        return redirect(url_for("vazhipadu_booking" if booking_type == "Vazhipadu" else "darshan_booking"))
+        return redirect(url_for(redirect_target))
     if participants < 1:
         flash("Number of persons must be at least 1.", "error")
-        return redirect(url_for("vazhipadu_booking" if booking_type == "Vazhipadu" else "darshan_booking"))
+        return redirect(url_for(redirect_target))
+
+    devotee_email = request.form["devotee_email"].strip().lower()
+    if not is_valid_email(devotee_email):
+        flash("Please enter a valid email address.", "error")
+        return redirect(url_for(redirect_target))
 
     existing_count = (
         db.session.query(db.func.coalesce(db.func.sum(Booking.participants), 0))
@@ -635,18 +698,18 @@ def create_booking(booking_type, service):
     )
     if existing_count + participants > slot.capacity:
         flash("That slot is full. Please choose another time.", "error")
-        return redirect(url_for("vazhipadu_booking" if booking_type == "Vazhipadu" else "darshan_booking"))
+        return redirect(url_for(redirect_target))
 
     booking = Booking(
         booking_code=generate_booking_code(),
         booking_type=booking_type,
         devotee_name=request.form["devotee_name"].strip(),
         devotee_phone=request.form["devotee_phone"].strip(),
-        devotee_email=request.form["devotee_email"].strip(),
+        devotee_email=devotee_email,
         visit_date=visit_date,
         participants=participants,
         total_amount=service.price * participants,
-        notes=request.form.get("notes", "").strip(),
+        notes=notes_override if notes_override is not None else request.form.get("notes", "").strip(),
         service_id=service.id,
         slot_id=slot.id,
         user_id=current_user.id,
@@ -709,6 +772,22 @@ def build_receipt_pdf(booking):
         pdf.setFillColor(colors.black)
         pdf.drawString(70 * mm, y, value)
         y -= 8 * mm
+
+    if booking.notes:
+        y -= 4 * mm
+        pdf.setFont("Helvetica-Bold", 11)
+        pdf.setFillColor(colors.HexColor("#6f675d"))
+        pdf.drawString(22 * mm, y, "Booking Notes")
+        y -= 7 * mm
+        pdf.setFont("Helvetica", 10)
+        pdf.setFillColor(colors.black)
+        for line in booking.notes.splitlines():
+            if y < 36 * mm:
+                pdf.showPage()
+                y = height - 24 * mm
+                pdf.setFont("Helvetica", 10)
+            pdf.drawString(22 * mm, y, line[:105])
+            y -= 6 * mm
 
     pdf.setStrokeColor(colors.HexColor("#e3d6c6"))
     pdf.line(22 * mm, y - 4 * mm, width - 22 * mm, y - 4 * mm)

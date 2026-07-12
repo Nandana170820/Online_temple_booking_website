@@ -398,7 +398,7 @@ p {
   background: var(--primary);
   color: white;
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(5, minmax(0, 1fr));
 }
 
 .service-strip a {
@@ -632,7 +632,7 @@ p {
 }
 
 .service-choice {
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   padding: 42px clamp(18px, 6vw, 82px) 0;
 }
 
@@ -651,6 +651,10 @@ p {
   inset: 0;
   position: absolute;
   z-index: 0;
+}
+
+.choice-panel.marriage::before {
+  background: linear-gradient(110deg, rgba(23, 63, 55, 0.86), rgba(143, 36, 27, 0.38));
 }
 
 .choice-panel::after {
@@ -1222,11 +1226,43 @@ textarea {
 }
 
 .flash {
+  align-items: center;
   border-radius: 8px;
   box-shadow: var(--shadow);
+  display: flex;
+  gap: 12px;
   font-weight: 800;
+  justify-content: space-between;
   margin-bottom: 10px;
   padding: 14px 16px;
+}
+
+.flash span {
+  min-width: 0;
+}
+
+.flash button,
+.form-message button {
+  align-items: center;
+  background: transparent;
+  border: 0;
+  border-radius: 6px;
+  color: inherit;
+  cursor: pointer;
+  display: inline-flex;
+  flex: 0 0 auto;
+  font-size: 22px;
+  font-weight: 900;
+  height: 30px;
+  justify-content: center;
+  line-height: 1;
+  padding: 0;
+  width: 30px;
+}
+
+.flash button:hover,
+.form-message button:hover {
+  background: rgba(0, 0, 0, 0.08);
 }
 
 .flash.success {
@@ -1236,6 +1272,26 @@ textarea {
 
 .flash.error {
   background: #fde8e5;
+  color: var(--primary);
+}
+
+.form-message {
+  align-items: center;
+  background: #e6f4eb;
+  border: 1px solid #bfdfd0;
+  border-radius: 8px;
+  color: var(--green);
+  display: flex;
+  font-weight: 900;
+  gap: 12px;
+  justify-content: space-between;
+  line-height: 1.45;
+  padding: 12px 14px;
+}
+
+.form-message.error {
+  background: #fde8e5;
+  border-color: #f0c4bd;
   color: var(--primary);
 }
 
@@ -1342,6 +1398,19 @@ dl div {
   gap: 14px;
   justify-content: space-between;
   padding: 13px 14px;
+}
+
+dl div.booking-notes {
+  align-items: flex-start;
+  display: grid;
+  gap: 8px;
+}
+
+.booking-notes dd {
+  color: var(--ink);
+  font-weight: 800;
+  line-height: 1.7;
+  text-align: left;
 }
 
 dt {

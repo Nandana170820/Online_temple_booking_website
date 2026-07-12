@@ -3,8 +3,8 @@
 {% block content %}
 <section class="page-title image-title">
   <p class="eyebrow">{{ t("Online services") }}</p>
-  <h1>{{ t("Darshan and vazhipadu booking") }}</h1>
-  <p>{{ t("Choose darshan or vazhipadu, enter devotee details, pay securely and save the temple receipt.") }}</p>
+  <h1>{{ t("Darshan, vazhipadu and marriage booking") }}</h1>
+  <p>{{ t("Choose darshan, vazhipadu or marriage booking, enter details, pay securely and save the temple receipt.") }}</p>
 </section>
 
 <section class="service-choice">
@@ -17,6 +17,11 @@
     <span>{{ t("Vazhipadu") }}</span>
     <h2>{{ t("Book offerings online") }}</h2>
     <p>{{ t("Choose offerings such as Archana, Neyvilakku, Pushpanjali and Bhagavathy Seva.") }}</p>
+  </a>
+  <a class="choice-panel marriage" href="{{ url_for('marriage_booking') }}">
+    <span>{{ t("Marriage") }}</span>
+    <h2>{{ t("Book marriage slot") }}</h2>
+    <p>{{ t("Submit bride and groom details, preferred muhurtham slot and contact information.") }}</p>
   </a>
 </section>
 
@@ -39,6 +44,8 @@
           <strong>&#8377;{{ "%.0f"|format(service.price) }}</strong>
           {% if service.category == "Vazhipadu" %}
             <a href="{{ url_for('vazhipadu_booking', service_id=service.id) }}">{{ t("Book now") }}</a>
+          {% elif service.category == "Marriage" %}
+            <a href="{{ url_for('marriage_booking') }}">{{ t("Book now") }}</a>
           {% else %}
             <a href="{{ url_for('darshan_booking') }}">{{ t("Book now") }}</a>
           {% endif %}

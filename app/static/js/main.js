@@ -1,4 +1,86 @@
 const visitDate = document.querySelector('input[name="visit_date"]');
+const pageMessages = document.body?.dataset || {};
+const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+const dismissMessage = (button) => {
+  button.closest(".flash, .form-message")?.remove();
+};
+
+document.querySelectorAll("[data-flash-close]").forEach((button) => {
+  button.addEventListener("click", () => dismissMessage(button));
+});
+
+const showFormMessage = (form, message, category = "error") => {
+  form.querySelector(".form-message")?.remove();
+  const wrapper = document.createElement("div");
+  wrapper.className = `form-message ${category}`;
+  wrapper.setAttribute("role", "alert");
+
+  const text = document.createElement("span");
+  text.textContent = message;
+
+  const close = document.createElement("button");
+  close.type = "button";
+  close.setAttribute("aria-label", "Dismiss message");
+  close.textContent = "\u00D7";
+  close.addEventListener("click", () => dismissMessage(close));
+
+  wrapper.append(text, close);
+  form.prepend(wrapper);
+};
+
+document.querySelectorAll("form").forEach((form) => {
+  form.setAttribute("novalidate", "novalidate");
+  form.addEventListener("submit", (event) => {
+    const fields = Array.from(form.querySelectorAll("input, select, textarea"));
+    let invalidField = null;
+    let message = "";
+
+    for (const field of fields) {
+      if (field.disabled || ["hidden", "submit", "button"].includes(field.type)) continue;
+
+      const value = (field.value || "").trim();
+      if (field.required && !value) {
+        invalidField = field;
+        message = pageMessages.requiredMessage || "Please fill all required fields.";
+        break;
+      }
+
+      if (field.type === "email" && value && !emailPattern.test(value)) {
+        invalidField = field;
+        message = pageMessages.invalidEmailMessage || "Please enter a valid email address.";
+        break;
+      }
+
+      const minLength = Number(field.getAttribute("minlength") || 0);
+      if (minLength && value.length < minLength) {
+        invalidField = field;
+        message = pageMessages.minlengthMessage || "Please check the minimum length.";
+        break;
+      }
+
+      const min = field.getAttribute("min");
+      if (min && value && field.type === "number" && Number(value) < Number(min)) {
+        invalidField = field;
+        message = pageMessages.requiredMessage || "Please fill all required fields.";
+        break;
+      }
+
+      if (min && value && field.type === "date" && value < min) {
+        invalidField = field;
+        message = pageMessages.requiredMessage || "Please fill all required fields.";
+        break;
+      }
+    }
+
+    if (!invalidField) return;
+
+    event.preventDefault();
+    showFormMessage(form, message);
+    invalidField.focus({ preventScroll: true });
+    invalidField.scrollIntoView({ block: "center", behavior: "smooth" });
+  });
+});
 
 if (visitDate) {
   const today = new Date();

@@ -654,7 +654,7 @@ p {
 }
 
 .choice-panel::after {
-  background: url("../images/temple-hero.png") center/cover;
+  background: url("../images/temple-hero.jpg") center/cover;
   content: "";
   inset: 0;
   position: absolute;
@@ -1373,7 +1373,7 @@ dd {
 .image-title {
   background:
     linear-gradient(90deg, rgba(31, 24, 19, 0.82), rgba(31, 24, 19, 0.42)),
-    url("../images/temple-hero.png") center/cover;
+    url("../images/temple-hero.jpg") center/cover;
   color: white;
   min-height: 280px;
 }
@@ -1583,7 +1583,7 @@ th {
 .map-panel {
   background:
     linear-gradient(135deg, rgba(23, 63, 55, 0.94), rgba(143, 36, 27, 0.86)),
-    url("../images/temple-hero.png") center/cover;
+    url("../images/temple-hero.jpg") center/cover;
   color: white;
   min-height: 260px;
 }

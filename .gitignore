@@ -6,3 +6,4 @@ instance/*.db
 .pytest_cache/
 output/
 tmp/
+app/static/images/temple-hero.png

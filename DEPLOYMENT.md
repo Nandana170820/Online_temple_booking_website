@@ -8,17 +8,21 @@ The deployed website should be public. Visitors do not need any secret key to op
 environment variable is only an internal Flask security setting for sessions; it is not a visitor password and
 should never be shown on the website.
 
-For Render:
+For Render free demo hosting:
 
 1. Push this project to GitHub.
 2. In Render, create a new Blueprint or Web Service from the repository.
-3. Use `render.yaml` if creating a Blueprint.
-4. Add these environment variables:
-   - `SECRET_KEY` (server-only session secret, not a public access key)
-   - `DATABASE_URL`
-   - `RAZORPAY_KEY_ID`
-   - `RAZORPAY_KEY_SECRET`
-5. Deploy the service and use the generated public URL.
+3. Use the included `render.yaml`; it creates a free Python web service.
+4. Deploy the service and use the generated public URL.
+
+The free demo uses SQLite automatically because `DATABASE_URL` is not set. This avoids Render billing details for
+review/demo hosting, but data can reset on redeploys or service restarts. For a production deployment, create a
+Postgres database and add `DATABASE_URL` in Render environment variables.
+
+Optional environment variables:
+
+- `RAZORPAY_KEY_ID`
+- `RAZORPAY_KEY_SECRET`
 
 Public access checklist:
 

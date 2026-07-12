@@ -59,14 +59,17 @@ The public website does not require a secret key for visitors. `SECRET_KEY` is o
 environment variable used to protect sessions. Anyone can open the deployed URL, view the public pages, register,
 and book available darshan or vazhipadu slots.
 
-### Render/Railway style settings
+### Render free demo settings
+
+The included `render.yaml` creates a free Python web service for demo/recruiter review.
 
 - Build command: `pip install -r requirements.txt`
 - Start command: `gunicorn wsgi:app`
-- Environment variable: `SECRET_KEY=replace-with-a-long-random-value`
+- Plan: `free`
 - Optional payment variables: `RAZORPAY_KEY_ID`, `RAZORPAY_KEY_SECRET`
 
-SQLite is fine for local review and small deployments. For production, use PostgreSQL and set `DATABASE_URL` to your database connection string.
+SQLite is fine for local review and free demo hosting. Demo data can reset on redeploys or service restarts. For
+production, use PostgreSQL and set `DATABASE_URL` to your database connection string.
 
 See `DEPLOYMENT.md` for Render and Razorpay setup notes.
 

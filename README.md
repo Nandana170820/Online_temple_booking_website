@@ -64,7 +64,7 @@ and book available darshan or vazhipadu slots.
 The included `render.yaml` creates a free Python web service for demo/recruiter review.
 
 - Build command: `pip install -r requirements.txt`
-- Start command: `gunicorn wsgi:app`
+- Start command: `gunicorn wsgi:app --bind 0.0.0.0:$PORT`
 - Plan: `free`
 - Optional payment variables: `RAZORPAY_KEY_ID`, `RAZORPAY_KEY_SECRET`
 

@@ -24,6 +24,13 @@ Optional environment variables:
 - `RAZORPAY_KEY_ID`
 - `RAZORPAY_KEY_SECRET`
 
+If you create a Web Service manually instead of using Blueprint, use:
+
+```text
+Build command: pip install -r requirements.txt
+Start command: gunicorn wsgi:app --bind 0.0.0.0:$PORT
+```
+
 Public access checklist:
 
 - Keep the Render service access setting public.

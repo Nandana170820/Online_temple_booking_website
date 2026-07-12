@@ -145,13 +145,48 @@ def create_app(test_config=None):
 def ensure_schema():
     db.create_all()
     inspector = inspect(db.engine)
-    if "booking" not in inspector.get_table_names():
+
+    required_columns = {
+        "user": {"id", "name", "email", "phone", "password_hash", "is_admin", "created_at"},
+        "service": {"id", "name", "category", "description", "price", "capacity_per_slot", "is_active"},
+        "slot": {"id", "name", "slot_time", "category", "capacity", "is_active"},
+        "booking": {
+            "id",
+            "booking_code",
+            "booking_type",
+            "devotee_name",
+            "devotee_phone",
+            "devotee_email",
+            "visit_date",
+            "participants",
+            "total_amount",
+            "status",
+            "payment_status",
+            "payment_mode",
+            "transaction_id",
+            "notes",
+            "created_at",
+            "user_id",
+            "service_id",
+            "slot_id",
+        },
+    }
+
+    table_names = set(inspector.get_table_names())
+    if not set(required_columns).issubset(table_names):
+        db.drop_all()
         db.create_all()
         return
 
-    booking_columns = {column["name"] for column in inspector.get_columns("booking")}
-    required = {"booking_type", "payment_status", "payment_mode", "transaction_id", "slot_id"}
-    if not required.issubset(booking_columns):
+    for table_name, columns in required_columns.items():
+        existing_columns = {column["name"] for column in inspector.get_columns(table_name)}
+        if not columns.issubset(existing_columns):
+            db.drop_all()
+            db.create_all()
+            return
+
+    # Keep demo deployments resilient if an older SQLite file has extra legacy tables.
+    if not table_names.issubset(set(required_columns)):
         db.drop_all()
         db.create_all()
 

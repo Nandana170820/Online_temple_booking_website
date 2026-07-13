@@ -834,3 +834,9 @@ def build_receipt_pdf(booking):
     pdf.showPage()
     pdf.save()
     return buffer.getvalue()
+
+
+# Hosting providers such as Render often look for a WSGI callable named
+# app inside the app package. Keeping this here makes both `gunicorn app:app`
+# and `gunicorn wsgi:app` work.
+app = create_app()

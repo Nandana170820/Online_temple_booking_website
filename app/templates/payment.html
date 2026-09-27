@@ -24,7 +24,7 @@
   <form
     class="payment-form checkout-panel razorpay-card"
     method="post"
-    data-razorpay-form
+    {% if razorpay_ready %}data-razorpay-form{% endif %}
     data-key="{{ razorpay_key_id }}"
     data-order-id="{{ razorpay_order.id if razorpay_order else '' }}"
     data-amount="{{ razorpay_order.amount if razorpay_order else (booking.total_amount * 100)|int }}"
@@ -37,13 +37,18 @@
     data-unavailable-text="{{ t('Payment gateway unavailable') }}"
   >
     <p class="eyebrow">{{ t("Secure checkout") }}</p>
-    <h2>{{ t("Pay with Razorpay") }}</h2>
-    <div class="razorpay-brand">
-      <span>UPI</span>
-      <span>{{ t("Cards") }}</span>
-      <span>{{ t("Net Banking") }}</span>
-      <span>{{ t("Wallets") }}</span>
-    </div>
+    {% if demo_mode %}
+      <h2>{{ t("Demo booking") }}</h2>
+      <p>{{ t("Demo mode: no real payment will be processed.") }}</p>
+    {% else %}
+      <h2>{{ t("Pay with Razorpay") }}</h2>
+      <div class="razorpay-brand">
+        <span>UPI</span>
+        <span>{{ t("Cards") }}</span>
+        <span>{{ t("Net Banking") }}</span>
+        <span>{{ t("Wallets") }}</span>
+      </div>
+    {% endif %}
     <input type="hidden" name="razorpay_payment_id" data-razorpay-payment-id>
     <input type="hidden" name="razorpay_order_id" data-razorpay-order-id>
     <input type="hidden" name="razorpay_signature" data-razorpay-signature>
@@ -51,7 +56,11 @@
       <span>{{ t("Amount payable") }}</span>
       <strong>&#8377;{{ "%.0f"|format(booking.total_amount) }}</strong>
     </div>
-    <button class="button primary wide" type="button" data-razorpay-button {% if not razorpay_ready %}disabled{% endif %}>{{ t("Pay Securely") }}</button>
+    {% if demo_mode %}
+      <button class="button primary wide" type="submit" name="demo_payment" value="1">{{ t("Complete Demo Booking") }}</button>
+    {% else %}
+      <button class="button primary wide" type="button" data-razorpay-button {% if not razorpay_ready %}disabled{% endif %}>{{ t("Pay Securely") if razorpay_ready else t("Payment gateway unavailable") }}</button>
+    {% endif %}
     <noscript>
       <p class="auth-link">{{ t("Enable JavaScript to open Razorpay Checkout.") }}</p>
     </noscript>

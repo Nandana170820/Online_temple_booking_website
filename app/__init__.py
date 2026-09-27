@@ -466,6 +466,15 @@ def register_routes(app):
     def payment(code):
         booking = Booking.query.filter_by(booking_code=code, user_id=current_user.id).first_or_404()
         if request.method == "POST":
+            if request.form.get("demo_payment") == "1" and not razorpay_is_ready(app):
+                booking.payment_mode = "Demo only (no charge)"
+                booking.transaction_id = f"DEMO-{booking.booking_code}"
+                booking.payment_status = "Demo Paid"
+                booking.status = "Confirmed"
+                db.session.commit()
+                flash("Demo booking confirmed. No real payment was processed.", "success")
+                return redirect(url_for("confirmation", code=booking.booking_code))
+
             razorpay_payment_id = request.form.get("razorpay_payment_id", "").strip()
             razorpay_order_id = request.form.get("razorpay_order_id", "").strip()
             razorpay_signature = request.form.get("razorpay_signature", "").strip()
@@ -491,6 +500,7 @@ def register_routes(app):
             razorpay_key_id=app.config["RAZORPAY_KEY_ID"],
             razorpay_order=razorpay_order,
             razorpay_ready=razorpay_order is not None,
+            demo_mode=not razorpay_is_ready(app),
         )
 
     @app.route("/confirmation/<code>")
